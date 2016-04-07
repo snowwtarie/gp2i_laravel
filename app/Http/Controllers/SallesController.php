@@ -70,9 +70,11 @@ class SallesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        //
+    public function edit($id){
+
+        $salle = Salles::findOrFail($id);
+        return view('salles.edit', compact('salle'));
+
     }
 
     /**
