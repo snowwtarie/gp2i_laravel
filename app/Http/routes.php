@@ -13,8 +13,11 @@ use App\Salles;
 */
 
 Route::auth();
-Route::resource('salles', 'SallesController');
 Route::get('/stock', function() {
     $stock = Salles::where('name', 'Stock')->first();
     return redirect(route('salles.show', $stock->id));
 });
+Route::resource('salles', 'SallesController');
+Route::resource('materiels', 'MaterielsController');
+Route::resource('caracteristiques', 'CaracteristiquesController');
+Route::resource('type', 'TypeMaterielsController');
