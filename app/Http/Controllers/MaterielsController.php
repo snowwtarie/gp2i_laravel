@@ -7,10 +7,16 @@ use Illuminate\Http\Request;
 use App\Salles;
 use App\Type_materiels;
 use App\Http\Requests;
+use App\Caracteristiques;
 use App\Materiels;
 
 class MaterielsController extends Controller
 {
+
+    public function __construct() {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -43,11 +49,20 @@ class MaterielsController extends Controller
      */
     public function store(Request $request) {
 
-        //dd($request->all());
         $materiel = Materiels::create($request->all());
         $type = Type_materiels::findOrFail($request['type_materiel_id']);
         $materiel->type_materiel()->associate($type);
         $materiel->save();
+        $caracs = Caracteristiques::where('materiel_id', 0)->get();
+        //$caracs->update(array('materiel_id' => $materiel->id));
+
+        foreach($caracs as $carac) {
+            $carac->materiel_id = $materiel->id;
+            $carac->save();
+        }
+
+        return redirect(route('salles.show', $materiel->salle_id));
+
     }
 
     /**
@@ -67,9 +82,16 @@ class MaterielsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        //
+    public function edit($id) {
+
+        $salles = Salles::get();
+        $type_materiels = Type_materiels::get();
+        $materiel = Materiels::find($id);
+        $type = Type_materiels::where('id', $materiel->type_materiel_id)->first();
+        $caracteristiques = Caracteristiques::where('materiel_id', $materiel->id)->get();
+
+        return view('materiels.edit', compact('materiel', 'type', 'caracteristiques', 'salles', 'type_materiels'));
+
     }
 
     /**
@@ -79,9 +101,14 @@ class MaterielsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
+    public function update(Request $request, $id) {
+
+        $materiel = Materiels::findOrFail($id);
+        $materiel->fill($request->all());
+        $materiel->save();
+
+        return redirect(route('materiels.edit', $id));
+
     }
 
     /**
@@ -90,8 +117,15 @@ class MaterielsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
+    public function destroy($id) {
+
+        $materiel = Materiels::findOrFail($id);
+        $caracteristiques = Caracteristiques::where('materiel_id', $materiel->id)->get();
+        foreach($caracteristiques as $carac) {
+            $carac->delete();
+        }
+
+        $materiel->delete();
+
     }
 }

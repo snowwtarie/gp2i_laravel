@@ -9,13 +9,14 @@ use App\Salles;
 use App\User;
 use App\Materiels;
 use App\Http\Controlles\Auth\AuthController;
+use App\Type_materiels;
 
 class SallesController extends Controller
 {
 
-    // public function __construct() {
-    //     $this->middleware('auth');
-    // }
+    public function __construct() {
+        $this->middleware('auth');
+    }
 
     /**
      * Display a listing of the resource.
@@ -87,9 +88,10 @@ class SallesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
+    public function update(Request $request, $id) {
+
+
+
     }
 
     /**
@@ -103,6 +105,6 @@ class SallesController extends Controller
         $salle = Salles::find($id);
         $salle->delete();
 
-        return redirect(route('salles.index'));;
+        return redirect(route('salles.index'));
     }
 }

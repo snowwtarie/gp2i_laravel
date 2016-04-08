@@ -1,10 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>Ajouter matériel</h1><hr />
+    <h1>Editer {{ $materiel->name }}</h1><hr />
     <div class="row">
-        {!! Form::open(array('url' => route('materiels.store'))) !!}
+        {!! Form::model($materiel, array('url' => route('materiels.update', $materiel->id))) !!}
             <div class="col-sm-3">
+                {!! Form::hidden('_method', 'put') !!}
                 <h2>Détails matériel</h2>
                 <div class="form-group">
                     {!! Form::label('name', 'Nom matériel') !!}
@@ -33,7 +34,6 @@
             </div>
             <div class="col-sm-9">
                 <h2>Caractéristiques</h2>
-                {!! Form::open(array('url' => route('caracteristiques.store'))) !!}
                 <table class="table table-hover">
                     <thead>
                         <tr>
@@ -51,10 +51,18 @@
                             <td>{!! Form::text('value', null, ['placeholder' => 'Valeur', 'id' => 'value']) !!}</td>
                             <td><button type="button" id="add_carac" class="btn btn-primary">Ajouter</button></td>
                         </tr>
+                        @foreach($caracteristiques as $carac)
+                            <tr>
+                                <td>{{ $carac->id }}</td>
+                                <td></td>
+                                <td>{{ $carac->name }}</td>
+                                <td>{{ $carac->value }}</td>
+                                <td><button type="button" class="btn btn-danger delBtn">Supprimer</button></td>
+                        @endforeach
                     </tbody>
                 </table>
             </div>
-            {!! Form::submit('Ajouter matériel', ['class' => 'btn btn-success form-control']) !!}
+            {!! Form::submit('Editer matériel', ['class' => 'btn btn-success form-control']) !!}
         {!! Form::close() !!}
     </div>
 @stop

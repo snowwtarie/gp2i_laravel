@@ -9,6 +9,11 @@ use App\Caracteristiques;
 
 class CaracteristiquesController extends Controller
 {
+
+    public function __construct() {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -38,6 +43,7 @@ class CaracteristiquesController extends Controller
     public function store(Request $request) {
         if($request->ajax()) {
             $carac = Caracteristiques::create($request->all());
+            return $carac->id;
         }
     }
 
@@ -81,8 +87,9 @@ class CaracteristiquesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
+    public function destroy($id) {
+
+        $carac = Caracteristiques::find($id);
+        $carac->delete();
     }
 }
