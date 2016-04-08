@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Salles;
+use App\User;
 use App\Materiels;
+use App\Http\Controlles\Auth\AuthController;
 
 class SallesController extends Controller
 {
@@ -22,7 +24,7 @@ class SallesController extends Controller
      */
     public function index() {
 
-        $salles = Salles::get();
+        $salles = Salles::with('user')->where('name', '!=', 'Stock')->get();
         return view('salles.index', compact('salles'));
     }
 
@@ -32,8 +34,6 @@ class SallesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create(){
-
-        return view('salles.create');
 
     }
 
@@ -45,7 +45,10 @@ class SallesController extends Controller
      */
     public function store(Request $request){
 
-        $salles = Salles::create($request->all());
+        $salle = Salles::create($request->all());
+        $user = User::findOrFail($request['user_id']);
+        $salle->user()->associate($user);
+        $salle->save();
         return redirect(route('salles.index'));
 
     }
@@ -95,8 +98,11 @@ class SallesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
+    public function destroy($id) {
+
+        $salle = Salles::find($id);
+        $salle->delete();
+
+        return redirect(route('salles.index'));;
     }
 }

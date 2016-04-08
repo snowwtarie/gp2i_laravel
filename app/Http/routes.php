@@ -1,4 +1,5 @@
 <?php
+use App\Salles;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,3 +14,7 @@
 
 Route::auth();
 Route::resource('salles', 'SallesController');
+Route::get('/stock', function() {
+    $stock = Salles::where('name', 'Stock')->first();
+    return redirect(route('salles.show', $stock->id));
+});
