@@ -2,6 +2,11 @@
 
 @section('content')
     <h1>{{ $salle->name }}</h1><hr />
+    <div class="row">
+        <div class="col-sm-offset-4">
+            <a href="{{ route('materiels.create') }}" class="btn btn-primary">Ajouter matériel</a>
+        </div>
+    </div>
     <table class="table table-hover">
         <thead>
             <tr>

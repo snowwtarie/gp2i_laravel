@@ -24,7 +24,7 @@
                 </div>
                 <div class="form-group">
                     {!! Form::label('salle_id', 'Salle') !!}
-                    {!! Form::select('salle_id', $salles->lists('name', 'id'), $salles->where('name', 'Stock')->first()->name, ['class' => 'form-control']) !!}
+                    {!! Form::select('salle_id', $salles->lists('name', 'id'), null, ['class' => 'form-control']) !!}
                 </div>
                 <div class="form-group">
                     {!! Form::label('type_materiel_id', 'Type de matériel') !!}
